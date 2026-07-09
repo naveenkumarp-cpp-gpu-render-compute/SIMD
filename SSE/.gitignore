@@ -1,8 +1,8 @@
+build/
 .vs/
-x64/
-Debug/
-Release/
+.vscode/
 *.user
-*.suo
-*.ipch
-*.VC.db
+*.obj
+*.pdb
+*.ilk
+*.exe
