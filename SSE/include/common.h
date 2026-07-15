@@ -8,7 +8,9 @@ struct Vecs
     T* a = nullptr;
     T* b = nullptr;
     T* seq = nullptr;
+    T* seq_mul = nullptr;
     T* simd = nullptr;
+    T* simd_mul = nullptr;
 };
 
 extern Vecs<int> gInt;
@@ -37,3 +39,30 @@ void initVec(Vecs<T>& v)
 }
 
 void initVecs();
+
+
+
+extern Vecs<int> gmInt;
+extern Vecs<float> gmFloat;
+extern Vecs<double> gmDouble;
+
+template<typename T>
+void initMat(Vecs<T>& v){
+    v.a = createVec<T>(MATA_ROWS * MATA_COLS);
+    v.b = createVec<T>(MATB_ROWS * MATB_COLS);
+    v.seq = createVec<T>(MATA_ROWS * MATB_COLS);
+    v.simd = createVec<T>(MATA_ROWS * MATB_COLS);
+
+
+    v.seq_mul = createVec<T>(MATA_ROWS * MATB_COLS);
+    v.simd_mul = createVec<T>(MATA_ROWS * MATB_COLS);
+
+    for (int i = 0;i < MATA_ROWS * MATA_COLS;i++)
+    {
+        v.a[i] = static_cast<T>(i);
+        v.b[i] = static_cast<T>(i * 2);
+    }
+}
+
+
+void initMats();

@@ -2,6 +2,7 @@
 
 int main()
 {
+    //vectors add
     initVecs();
 
     seq();
@@ -9,6 +10,14 @@ int main()
     sse();
 
     verifyAll();
+
+    //matrix add and mul
+
+    initMats();
+
+    seq_mat();
+
+    sse_mat();
 
     return 0;
 }

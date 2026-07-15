@@ -19,3 +19,8 @@ struct timer
         return chrono::duration<double, milli>(end - start).count();
     }
 };
+
+#define MATA_ROWS 1000
+#define MATA_COLS 1000
+#define MATB_ROWS 1000
+#define MATB_COLS 1000
