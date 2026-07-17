@@ -22,5 +22,5 @@ struct timer
 
 #define MATA_ROWS 23
 #define MATA_COLS 23
-#define MATB_ROWS 23
+#define MATB_ROWS 21
 #define MATB_COLS 23

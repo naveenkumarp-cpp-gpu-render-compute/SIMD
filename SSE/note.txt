@@ -1,0 +1,31 @@
+SIMD: Intel intrinsics...
+
+MMX  -- very basics
+SSE (SSE/SSE2/SSSE/SSE4.1/SSE4.2)
+AVX256/AVX512
+
+load/store
+arith
+logic
+compare
+shift....
+...….and other basics
+
+
+special: SSE
+
+shuffle
+unpack
+blend
+horizontal
+pack
+
+
+special: AVX
+
+Grab [gather] 
+Mask
+Compress
+Permute  ….. others tried
+
+matrix mul : different methods tried and compared results and used as many types possible using above instruction set
