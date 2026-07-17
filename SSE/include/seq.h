@@ -70,14 +70,15 @@ void seqMatMul(Vecs<T>& v, const char* name){
 
     t.start = high_resolution_clock::now();
 
-    for (int i = 0;i < MATA_ROWS;i++)
+
+    for( int i = 0; i < MATA_ROWS; i++)
     {
-        for (int j = 0;j < MATB_COLS;j++)
+        for( int j = 0; j < MATB_COLS; j++)
         {
-            v.seq_mul[i * MATB_COLS + j] = 0;
-            for (int k = 0;k < MATA_COLS;k++)
+            v.seq_mul[ i * MATB_COLS + j ] = 0;
+            for( int k = 0; k < MATB_ROWS; k++)
             {
-                v.seq_mul[i * MATB_COLS + j] += v.a[i * MATA_COLS + k] * v.b[k * MATB_COLS + j];
+                v.seq_mul[ i * MATB_COLS + j ] += v.a[i*MATA_COLS + k ] * v.b[k*MATB_COLS + j];
             }
         }
     }

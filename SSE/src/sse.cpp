@@ -6,7 +6,21 @@ void sseAddInt(Vecs<int> &v)
 
     t.start = high_resolution_clock::now();
 
-    int i = 0;
+    int i ;
+    for (i = 0; i < VEC_SIZE; i = i + 4)
+    {
+        __m128i a = _mm_loadu_si128((__m128i *)(v.a + i));
+        __m128i b = _mm_loadu_si128((__m128i *)(v.b + i));
+        __m128i c = _mm_add_epi32(a, b);
+
+        _mm_storeu_si128((__m128i *)(v.simd + i), c);
+    }
+
+    for(; i < VEC_SIZE; i++){
+        v.simd[i]= v.a[i] + v.b[i];
+    }
+
+    #if 0
 
     // Process 4 integers at a time
     for (; i <= VEC_SIZE - 4; i += 4)
@@ -25,6 +39,8 @@ void sseAddInt(Vecs<int> &v)
     // Remaining elements
     for (; i < VEC_SIZE; i++)
         v.simd[i] = v.a[i] + v.b[i];
+
+    #endif
 
     t.end = high_resolution_clock::now();
 
@@ -114,22 +130,22 @@ void sseMatAdd(Vecs<int> &v, const char *name)
 {
     timer t;
 
-    t.start = high_resolution_clock::now();
-    int i, j;
-    for (i = 0; i < MATA_ROWS; i++)
-    {
-        for (j = 0; j <= MATA_COLS - 4; j += 4)
-        {
-            __m128i a = _mm_loadu_si128((__m128i *)&v.a[i * MATA_COLS + j]);
-            __m128i b = _mm_loadu_si128((__m128i *)&v.b[i * MATA_COLS + j]);
-            __m128i c = _mm_add_epi32(a, b);
-            _mm_storeu_si128((__m128i *)&v.simd[i * MATA_COLS + j], c);
+    t.start = high_resolution_clock::now();\
+    int i,j;
+    for(i = 0; i < MATA_ROWS; i++){
+        for( j =0; j <= MATA_COLS-4;j = j + 4){
+
+            __m128i a = _mm_loadu_si128((__m128i*)(v.a + (i * MATA_COLS + j)));
+            __m128i b = _mm_loadu_si128((__m128i*)(v.b + (i * MATA_COLS + j)));
+            __m128i c = _mm_add_epi32(a,b);
+
+            _mm_storeu_si128((__m128i*)(v.simd + (i * MATA_COLS + j)),c);
+
         }
-    }
-    // Handle remaining elements
-    for (; j < MATA_COLS; j++)
-    {
-        v.simd[i * MATA_COLS + j] = v.a[i * MATA_COLS + j] + v.b[i * MATA_COLS + j];
+        for (; j < MATA_COLS; j++)
+        {
+            v.simd[i * MATA_COLS + j] = v.a[i * MATA_COLS + j] + v.b[i * MATA_COLS + j];
+        }
     }
 
     t.end = high_resolution_clock::now();
@@ -156,12 +172,14 @@ void sseMatAdd(Vecs<float> &v, const char *name)
             __m128 c = _mm_add_ps(a, b);
             _mm_storeu_ps(&v.simd[i * MATA_COLS + j], c);
         }
+
+            // Handle remaining elements
+        for (; j < MATA_COLS; j++)
+        {
+            v.simd[i * MATA_COLS + j] = v.a[i * MATA_COLS + j] + v.b[i * MATA_COLS + j];
+        }
     }
-    // Handle remaining elements
-    for (; j < MATA_COLS; j++)
-    {
-        v.simd[i * MATA_COLS + j] = v.a[i * MATA_COLS + j] + v.b[i * MATA_COLS + j];
-    }
+    
 
     t.end = high_resolution_clock::now();
 
@@ -187,12 +205,13 @@ void sseMatAdd(Vecs<double> &v, const char *name)
             __m128d c = _mm_add_pd(a, b);
             _mm_storeu_pd(&v.simd[i * MATA_COLS + j], c);
         }
+        // Handle remaining elements
+        for (; j < MATA_COLS; j++)
+        {
+            v.simd[i * MATA_COLS + j] = v.a[i * MATA_COLS + j] + v.b[i * MATA_COLS + j];
+        }
     }
-    // Handle remaining elements
-    for (; j < MATA_COLS; j++)
-    {
-        v.simd[i * MATA_COLS + j] = v.a[i * MATA_COLS + j] + v.b[i * MATA_COLS + j];
-    }
+    
 
     t.end = high_resolution_clock::now();
 
@@ -211,7 +230,31 @@ void sseMatMul(Vecs<int> &v, const char *name)
 
     timer t;
     t.start = high_resolution_clock::now();
+#if 0
+    int i,j;
 
+    for( i = 0 ; i < MATA_ROWS; i++)
+    {
+        for( j = 0 ; j < MATB_COLS; j++)
+        {
+            __m128i sum = 0;
+            for( k = 0; k <= MATB_ROWS-4; k = k+4)
+            {
+                __m128i a  = _mm_loadu_si128(v.a);
+
+                __m128i b  = _mm_set( v.b[i]
+
+                );
+
+                __m128i c =  _mm_mullo_epi32(a,b);
+
+                sum = sum + c;
+
+            }
+        }
+    }
+
+#else
     for (int i = 0; i < MATA_ROWS; i++)
     {
         for (int j = 0; j < MATB_COLS; j++)
@@ -243,7 +286,7 @@ void sseMatMul(Vecs<int> &v, const char *name)
             v.simd_mul[i * MATB_COLS + j] = sum;
         }
     }
-
+#endif
     t.end = high_resolution_clock::now();
 
     cout << left << setw(10) << name

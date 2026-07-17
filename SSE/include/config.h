@@ -20,7 +20,7 @@ struct timer
     }
 };
 
-#define MATA_ROWS 1000
-#define MATA_COLS 1000
-#define MATB_ROWS 1000
-#define MATB_COLS 1000
+#define MATA_ROWS 23
+#define MATA_COLS 23
+#define MATB_ROWS 23
+#define MATB_COLS 23
